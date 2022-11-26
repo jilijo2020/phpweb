@@ -1,0 +1,50 @@
+第四章 数据库和模板引擎
+4.3 【案例】封装Model类
+在框架中，一般地让一个模型(model)对应一个数据表，使它们一一对应
+比如：之前我们学习的Student模型，对应数据表student
+如果有更多的表，就需要更多的模型，
+模型的作用就是连接数据库并操作数据表
+而模型之间拥有很多共性，
+因此我们把共有的属性以及方法封装到Model类中，
+让每一个模型继承Model类。
+那模型间有哪些共性呢？
+1、获取数据库连接、初始化表名——————获取到模型对应的表名
+2、查询数据————————通过模型查询数据表
+	select * from table
+	select field1,field2 from table limit n
+	select * from table limit n,m
+	select * from table order by field desc limit n
+	select * from table order by field limit n,m
+	select field1,field2 from table where field = ?;
+	select * from table where field1 = ? and field2 = ?;
+	select * from table where field1 = ? or field2 = ?;
+	select * from table where field = ? limit n,m;
+	select * from table where field1 = ? and field2 = ? order by field limit n,m;
+	select field1,field2 from table where field1 = ? or field2 = ? limit n;
+	SELECT语句
+	常用方法 get(),first(),value()
+	简单的SELECT查询
+	条件查询
+		WHERE
+	排序和限量，
+		ORDER BY
+		LIMIT
+3、新增数据————————通过模型新增数据到表
+#插入单条数据
+INSERT INTO `student`(`id`,`name`,`gender`,`email`,`mobile`) 
+VALUES(5,'张三','男','abc@ss.com','12345678910');
+
+#插入多条数据
+INSERT INTO `student`(`id`,`name`,`gender`,`email`,`mobile`) 
+VALUES(5,'张三','男','abc@ss.com','12345678910')
+,(5,'张三','男','abc@ss.com','12345678910')
+,(5,'张三','男','abc@ss.com','12345678910');
+/**
+ *拼接插入的sql语句
+	INSERT INTO `student`(`id`,`name`,`gender`,`email`,`mobile`) VALUES(?,?,?,?,?)
+	INSERT INTO `student`(`id`,`name`,`gender`,`email`,`mobile`) VALUES(?,?,?,?,?),(?,?,?,?,?),(?,?,?,?,?)
+ */
+4、修改数据————————通过模型更新数据表的数据
+UPDATE `student` SET `mobile`=? WHERE `id` = ? ORDER BY `id` DESC LIMIT 1;
+5、删除数据————————通过模型从表删除数据
+DELETE FROM `student` WHERE `id` = ? ORDER BY `id` DESC LIMIT 1;
